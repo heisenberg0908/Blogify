@@ -4,23 +4,30 @@ import { Button1 } from "../components/Button1";
 import { InputBar } from "../components/InputBar";
 import { Button } from "../components/Button";
 import axios from "axios";
+
 export const PostBlog = () => {
   const [title, setTitle] = useState("");
-  const [description, setdescription] = useState("");
-  const [author,setauthor]=useState("")
+  const [description, setDescription] = useState("");
+  const [author, setAuthor] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
-  
-  const handlePost=async()=>{
+
+  const handlePost = async () => {
     try {
-      const response=await axios.post('http://localhost:3000/api/v1/blogs/postblog',{
+      const response = await axios.post('http://localhost:3000/api/v1/blogs/postblog', {
         title,
         description,
         author
-      })
-      console.log(response.data)
+      });
+      console.log(response.data);
+      setSuccessMessage("Blog posted successfully!");
+      // Optionally, you can clear the form fields after successful post
+      setTitle("");
+      setDescription("");
+      setAuthor("");
     } catch (error) {
-      console.error(error)
-      
+      console.error(error);
+      setSuccessMessage("Failed to post blog. Please try again.");
     }
   }
 
@@ -44,26 +51,34 @@ export const PostBlog = () => {
               onChange={(e) => setTitle(e.target.value)}
               placeholder={" eg: AI: The Unknown Future"}
               label={"Title"}
+              value={title}
             />
           </div>
           <div className="mb-4">
             <InputBar
-              onChange={(e) => setauthor(e.target.value)}
+              onChange={(e) => setAuthor(e.target.value)}
               placeholder={" eg: Orion"}
               label={"Author"}
+              value={author}
             />
           </div>
           <div className="mb-4">
             <InputBar
-              onChange={(e) => setdescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder={" eg: The next coming generation is of AI..."}
               label={"Body"}
               isTextarea={true}
+              value={description}
             />
           </div>
           <div className="flex justify-center mt-6">
             <Button onClick={handlePost} placeholder={"Post Blog"} />
           </div>
+          {successMessage && (
+            <div className="mt-4 text-center text-green-600">
+              {successMessage}
+            </div>
+          )}
         </div>
       </main>
     </div>
